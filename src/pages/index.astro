@@ -1,0 +1,221 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base>
+  <canvas id="canvas"></canvas>
+
+  <main>
+    <div class="label">digital garden</div>
+
+    <h1>
+      <span class="char">Y</span><span class="char">O</span><span class="char">U</span><span class="char">R</span>
+      <span class="char space"> </span>
+      <span class="char">N</span><span class="char">A</span><span class="char">M</span><span class="char">E</span>
+    </h1>
+
+    <p class="tagline">notes &middot; projects &middot; ideas</p>
+
+    <nav>
+      <a href="/notes" class="nav-link">notes →</a>
+      <a href="/projects" class="nav-link">projects →</a>
+      <a href="/about" class="nav-link">about →</a>
+    </nav>
+  </main>
+</Base>
+
+<style>
+  #canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.85;
+  }
+
+  main {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    gap: 1.5rem;
+  }
+
+  .label {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0;
+  }
+
+  h1 {
+    font-size: clamp(3rem, 10vw, 7rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--fg);
+    line-height: 1;
+  }
+
+  .char {
+    display: inline-block;
+    opacity: 0;
+  }
+
+  .char.space {
+    width: 0.3em;
+  }
+
+  .tagline {
+    font-size: 0.9rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    opacity: 0;
+  }
+
+  nav {
+    display: flex;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+
+  .nav-link {
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    color: var(--accent2);
+    opacity: 0;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .nav-link:hover {
+    border-color: var(--accent2);
+    color: var(--fg);
+  }
+</style>
+
+<script>
+  const nordColors = ['#88C0D0', '#81A1C1', '#5E81AC', '#8FBCBB', '#B48EAD'];
+
+  const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d')!;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const mouse = { x: -9999, y: -9999 };
+  window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+  const particles = Array.from({ length: 60 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2.5 + 1.0,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    color: nordColors[Math.floor(Math.random() * nordColors.length)],
+    alpha: Math.random() * 0.4 + 0.45,
+  }));
+
+  const MOUSE_RADIUS = 160;
+  const REPEL_STRENGTH = 0.018;
+  const MAX_SPEED = 1.2;
+
+  function frame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Particle-to-particle connections
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        if (d < 140) {
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(136,192,208,${0.13 * (1 - d / 140)})`;
+          ctx.lineWidth = 0.6;
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Mouse connections + repulsion
+    for (const p of particles) {
+      const dx = p.x - mouse.x;
+      const dy = p.y - mouse.y;
+      const d = Math.sqrt(dx * dx + dy * dy);
+      if (d < MOUSE_RADIUS) {
+        const t = 1 - d / MOUSE_RADIUS;
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(143,188,187,${0.35 * t})`;
+        ctx.lineWidth = 0.8;
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(mouse.x, mouse.y);
+        ctx.stroke();
+        p.vx += (dx / d) * REPEL_STRENGTH * t;
+        p.vy += (dy / d) * REPEL_STRENGTH * t;
+      }
+      // Global speed cap
+      const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+      if (speed > MAX_SPEED) { p.vx = (p.vx / speed) * MAX_SPEED; p.vy = (p.vy / speed) * MAX_SPEED; }
+    }
+
+    // Cursor dot
+    ctx.beginPath();
+    ctx.arc(mouse.x, mouse.y, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(143,188,187,0.5)';
+    ctx.fill();
+
+    // Move and draw particles
+    const EDGE_MARGIN = 120;
+    const EDGE_FORCE = 0.035;
+    for (const p of particles) {
+      // Quadratic repulsion force from each edge — stronger closer to the wall
+      if (p.x < EDGE_MARGIN)                 p.vx += Math.pow(1 - p.x / EDGE_MARGIN, 2) * EDGE_FORCE;
+      if (p.x > canvas.width - EDGE_MARGIN)  p.vx -= Math.pow(1 - (canvas.width  - p.x) / EDGE_MARGIN, 2) * EDGE_FORCE;
+      if (p.y < EDGE_MARGIN)                 p.vy += Math.pow(1 - p.y / EDGE_MARGIN, 2) * EDGE_FORCE;
+      if (p.y > canvas.height - EDGE_MARGIN) p.vy -= Math.pow(1 - (canvas.height - p.y) / EDGE_MARGIN, 2) * EDGE_FORCE;
+
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // Hard clamp as last resort so nothing escapes entirely
+      p.x = Math.max(0, Math.min(canvas.width,  p.x));
+      p.y = Math.max(0, Math.min(canvas.height, p.y));
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.alpha;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+
+  // anime.js animations
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js';
+  script.onload = () => {
+    const anime = (window as any).anime;
+    anime({ targets: '.label', opacity: [0, 1], translateY: [8, 0], duration: 700, easing: 'easeOutExpo', delay: 100 });
+    anime({ targets: '.char', opacity: [0, 1], translateY: [40, 0], duration: 900, easing: 'easeOutExpo', delay: anime.stagger(55, { start: 300 }) });
+    anime({ targets: '.tagline', opacity: [0, 1], translateY: [8, 0], duration: 700, easing: 'easeOutExpo', delay: 950 });
+    anime({ targets: '.nav-link', opacity: [0, 1], translateX: [-10, 0], duration: 600, easing: 'easeOutExpo', delay: anime.stagger(80, { start: 1150 }) });
+  };
+  document.head.appendChild(script);
+</script>
