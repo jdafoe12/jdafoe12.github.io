@@ -1,0 +1,71 @@
+---
+import Base from './Base.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description } = Astro.props;
+---
+<Base title={`${title} — Your Name`} description={description}>
+  <div class="page">
+    <header>
+      <a href="/" class="home-link">Your Name</a>
+      <nav>
+        <a href="/publications">publications</a>
+        <a href="/cv">cv</a>
+        <a href="/notes">notes</a>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+  </div>
+</Base>
+
+<style>
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 3rem 2rem 6rem;
+    color: var(--fg);
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(94, 129, 172, 0.12);
+  }
+
+  .home-link {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--fg);
+    transition: color 0.2s;
+  }
+
+  .home-link:hover {
+    color: var(--accent);
+  }
+
+  nav {
+    display: flex;
+    gap: 2rem;
+  }
+
+  nav a {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+
+  nav a:hover {
+    color: var(--fg);
+  }
+</style>

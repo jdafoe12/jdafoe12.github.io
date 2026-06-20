@@ -1,0 +1,120 @@
+---
+import Academic from '../layouts/Academic.astro';
+---
+<Academic title="Publications">
+  <h1 class="page-title">Publications</h1>
+
+  <section class="pub-section">
+    <h2 class="year">2026</h2>
+
+    <article class="pub">
+      <p class="pub-title">Title of Your Paper</p>
+      <p class="pub-authors"><strong>Your Name</strong>, Co-author One, Co-author Two</p>
+      <p class="pub-venue">Conference / Journal Name, 2026</p>
+      <div class="pub-links">
+        <a href="#">pdf</a>
+        <a href="#">arXiv</a>
+        <a href="#">code</a>
+      </div>
+    </article>
+
+    <article class="pub">
+      <p class="pub-title">Another Paper Title</p>
+      <p class="pub-authors">Co-author One, <strong>Your Name</strong>, Co-author Two</p>
+      <p class="pub-venue">Workshop Name @ Conference, 2026</p>
+      <div class="pub-links">
+        <a href="#">pdf</a>
+        <a href="#">arXiv</a>
+      </div>
+    </article>
+  </section>
+
+  <section class="pub-section">
+    <h2 class="year">2025</h2>
+
+    <article class="pub">
+      <p class="pub-title">Earlier Paper Title</p>
+      <p class="pub-authors"><strong>Your Name</strong>, Co-author One</p>
+      <p class="pub-venue">Journal of Something, 2025</p>
+      <div class="pub-links">
+        <a href="#">pdf</a>
+        <a href="#">code</a>
+      </div>
+    </article>
+  </section>
+</Academic>
+
+<style>
+  .page-title {
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--fg);
+    margin-bottom: 3rem;
+    letter-spacing: -0.01em;
+  }
+
+  .pub-section {
+    margin-bottom: 3rem;
+  }
+
+  .year {
+    font-size: 0.70rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(94, 129, 172, 0.10);
+  }
+
+  .pub {
+    padding: 1.1rem 0;
+    border-bottom: 1px solid rgba(94, 129, 172, 0.06);
+  }
+
+  .pub:last-child {
+    border-bottom: none;
+  }
+
+  .pub-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--fg);
+    margin-bottom: 0.35rem;
+    line-height: 1.4;
+  }
+
+  .pub-authors {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 0.2rem;
+  }
+
+  .pub-venue {
+    font-size: 0.80rem;
+    color: var(--accent2);
+    margin-bottom: 0.6rem;
+    font-style: italic;
+  }
+
+  .pub-links {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .pub-links a {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid rgba(94, 129, 172, 0.25);
+    padding-bottom: 1px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .pub-links a:hover {
+    color: var(--fg);
+    border-color: var(--fg);
+  }
+</style>
