@@ -140,12 +140,17 @@ const defaultNewsCategory = 'academic';
   /* ── Top-right nav ───────────────────────────────────────── */
   .site-nav {
     position: fixed;
-    top: 2rem;
-    right: 2.5rem;
+    top: 0;
+    right: 0;
+    left: 0;
     z-index: 1000;
     display: flex;
+    justify-content: flex-end;
     gap: 2rem;
-    isolation: isolate;
+    padding: 1.5rem 2.5rem;
+    background: rgba(46, 52, 64, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
   .site-nav a {
@@ -176,7 +181,7 @@ const defaultNewsCategory = 'academic';
   /* ── Identity card: pinned top-left ──────────────────────── */
   .identity-col {
     position: fixed;
-    top: clamp(3rem, 8vh, 5rem);
+    top: clamp(5rem, 10vh, 7rem);
     left: var(--identity-left);
     z-index: 5;
   }
@@ -454,10 +459,8 @@ const defaultNewsCategory = 'academic';
 
   @media (max-width: 760px) {
     .site-nav {
-      right: 1.25rem;
-      left: 1.25rem;
-      justify-content: space-between;
-      gap: 0.75rem;
+      padding: 1.25rem 1.25rem;
+      gap: 1rem;
     }
 
     .site-nav a {
