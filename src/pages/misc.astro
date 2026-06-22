@@ -1,0 +1,33 @@
+---
+import Academic from '../layouts/Academic.astro';
+---
+<Academic title="Misc" description="Miscellaneous work and interests by Josh Dafoe.">
+  <h1>Misc</h1>
+  <p class="intro">Projects, experiments, and interests that do not fit elsewhere.</p>
+
+  <div class="empty-state">Nothing posted here yet.</div>
+</Academic>
+
+<style>
+  h1 {
+    margin-bottom: 0.75rem;
+    color: var(--fg);
+    font-size: 1.6rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .intro {
+    margin-bottom: 3rem;
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  .empty-state {
+    padding: 2rem 0;
+    border-top: 1px solid rgba(94, 129, 172, 0.12);
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+</style>

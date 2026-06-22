@@ -1,13 +1,37 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
+import profileImage from '../assets/images/profile.jpg';
+import { Content as AboutContent } from '../content/about.md';
+import { frontmatter as news } from '../content/news.md';
+
+interface NewsEntry {
+  date: string;
+  text: string;
+  category?: 'academic' | 'essays' | 'activities' | 'open-source';
+  url?: string;
+  linkLabel?: string;
+  image?: string;
+  imageAlt?: string;
+}
+
+const newsEntries = (news.entries ?? []) as NewsEntry[];
+const newsCategories = [
+  { value: 'all', label: 'All' },
+  { value: 'academic', label: 'Academic' },
+  { value: 'essays', label: 'Essays & Site' },
+  { value: 'activities', label: 'Other Activities' },
+  { value: 'open-source', label: 'Open Source' },
+] as const;
+const defaultNewsCategory = 'academic';
 ---
-<Base title="Your Name">
+<Base title="Josh Dafoe">
   <canvas id="canvas"></canvas>
 
   <nav class="site-nav">
     <a href="/publications">publications</a>
-    <a href="/cv">cv</a>
-    <a href="/notes">notes</a>
+    <a href="/essays">essays</a>
+    <a href="/misc">misc</a>
   </nav>
 
   <main>
@@ -15,9 +39,16 @@ import Base from '../layouts/Base.astro';
 
       <div class="identity-col">
         <div class="card identity-card">
-          <div class="headshot"></div>
+          <Image
+            class="headshot"
+            src={profileImage}
+            alt="Portrait of Josh Dafoe"
+            width={96}
+            height={96}
+            format="webp"
+          />
           <div class="identity-text">
-            <h1>Joshua Dafoe</h1>
+            <h1>Josh Dafoe</h1>
             <p class="title-line">NSF Graduate Research Fellow</p>
             <p class="title-line">PhD Student @ Michigan Tech</p>
             <div class="social-row">
@@ -41,28 +72,57 @@ import Base from '../layouts/Base.astro';
 
       <div class="card about-card">
         <h2 class="card-heading">About</h2>
-        <p class="about">
-          A sentence or two about who you are and what you work on.
-          What draws you to your research? What is this site for?
-        </p>
+        <div class="about"><AboutContent /></div>
       </div>
 
       <div class="card news-card">
         <h2 class="card-heading">News</h2>
-        <ul class="news-list">
-          <li>
-            <span class="news-date">Jun 2026</span>
-            <span class="news-text">Started PhD at University X.</span>
-          </li>
-          <li>
-            <span class="news-date">May 2026</span>
-            <span class="news-text">Paper accepted at Conference Y.</span>
-          </li>
-          <li>
-            <span class="news-date">Jan 2026</span>
-            <span class="news-text">Awarded fellowship Z.</span>
-          </li>
-        </ul>
+        <div class="news-tabs" role="tablist" aria-label="Filter news by category">
+          {newsCategories.map((category) => (
+            <button
+              class="news-tab"
+              type="button"
+              role="tab"
+              aria-controls="news-timeline"
+              aria-selected={category.value === defaultNewsCategory ? 'true' : 'false'}
+              tabindex={category.value === defaultNewsCategory ? 0 : -1}
+              data-news-filter={category.value}
+            >
+              {category.label}
+            </button>
+          ))}
+        </div>
+        <div id="news-timeline" class="news-timeline" role="tabpanel" tabindex="0" aria-label="News timeline">
+          <ul class="news-list">
+            {newsEntries.map((entry) => (
+              <li
+                class="news-entry"
+                data-news-category={entry.category ?? 'academic'}
+                hidden={(entry.category ?? 'academic') !== defaultNewsCategory}
+              >
+                <span class="news-marker" aria-hidden="true"></span>
+                <div class="news-content">
+                  <time class="news-date">{entry.date}</time>
+                  <p class="news-text">{entry.text}</p>
+                  {entry.url && (
+                    <a class="news-link" href={entry.url} target="_blank" rel="noopener">
+                      {entry.linkLabel ?? 'Read more'} <span aria-hidden="true">↗</span>
+                    </a>
+                  )}
+                  {entry.image && (
+                    <img
+                      class="news-image"
+                      src={entry.image}
+                      alt={entry.imageAlt ?? ''}
+                      loading="lazy"
+                    />
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+          <p class="news-empty" hidden>No entries in this category yet.</p>
+        </div>
       </div>
 
     </div>
@@ -101,37 +161,39 @@ import Base from '../layouts/Base.astro';
 
   /* ── Main ────────────────────────────────────────────────── */
   main {
+    --identity-left: clamp(2rem, 4vw, 3.5rem);
+    --identity-width: 210px;
+    --content-gap: clamp(2rem, 5vw, 5rem);
+    --page-right: clamp(2rem, 5vw, 5rem);
+
     position: relative;
     z-index: 1;
     min-height: 100vh;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-end;
-    padding: 12vh 5vw 3rem;
+    padding: 12vh var(--page-right) 3rem 0;
   }
 
   /* ── Identity card: pinned top-left ──────────────────────── */
   .identity-col {
     position: fixed;
     top: clamp(3rem, 8vh, 5rem);
-    left: clamp(2rem, 4vw, 3.5rem);
+    left: var(--identity-left);
     z-index: 5;
   }
 
-  /* ── Text column: centered on page ──────────────────────── */
+  /* ── Text column: responsive gutter from identity card ─── */
   .content {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    width: 62vw;
+    margin-left: calc(var(--identity-left) + var(--identity-width) + var(--content-gap));
   }
 
   /* ── Shared card ─────────────────────────────────────────── */
   .card {
-    background: rgba(46, 52, 64, 0.80);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border: 1px solid rgba(94, 129, 172, 0.09);
+    background: rgba(46, 52, 64, 0.38);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+    border: 1px solid rgba(129, 161, 193, 0.32);
     border-radius: 10px;
     padding: 2rem 2.2rem;
   }
@@ -144,15 +206,16 @@ import Base from '../layouts/Base.astro';
     text-align: center;
     gap: 0.9rem;
     flex: 0 0 auto;
-    width: 210px;
+    width: var(--identity-width);
   }
 
   .headshot {
     width: 96px;
     height: 96px;
     border-radius: 50%;
-    background: rgba(94, 129, 172, 0.12);
     border: 1px solid rgba(94, 129, 172, 0.22);
+    object-fit: cover;
+    object-position: center;
     flex-shrink: 0;
   }
 
@@ -236,15 +299,105 @@ import Base from '../layouts/Base.astro';
 
   .news-list {
     list-style: none;
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 0.85rem;
+    gap: 0;
+    padding-left: 1.15rem;
   }
 
-  .news-list li {
+  .news-tabs {
     display: flex;
-    gap: 1rem;
-    align-items: baseline;
+    gap: 0.35rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.2rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .news-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .news-tab {
+    flex: 0 0 auto;
+    border: 1px solid rgba(129, 161, 193, 0.25);
+    border-radius: 999px;
+    padding: 0.42rem 0.72rem;
+    background: rgba(59, 66, 82, 0.28);
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.68rem;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s, border-color 0.2s;
+  }
+
+  .news-tab:hover {
+    color: var(--fg);
+    border-color: rgba(143, 188, 187, 0.55);
+  }
+
+  .news-tab[aria-selected='true'] {
+    color: var(--nord0);
+    background: var(--nord7);
+    border-color: var(--nord7);
+  }
+
+  .news-tab:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .news-list::before {
+    content: '';
+    position: absolute;
+    top: 0.45rem;
+    bottom: 0.45rem;
+    left: 0.3rem;
+    width: 1px;
+    background: rgba(129, 161, 193, 0.28);
+  }
+
+  .news-timeline {
+    max-height: clamp(22rem, 55vh, 38rem);
+    overflow-y: auto;
+    padding-right: 0.8rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--nord9) rgba(59, 66, 82, 0.35);
+    overscroll-behavior: contain;
+  }
+
+  .news-timeline:focus-visible {
+    outline: 1px solid var(--accent);
+    outline-offset: 0.4rem;
+    border-radius: 4px;
+  }
+
+  .news-entry {
+    position: relative;
+    padding: 0 0 1.4rem 0.75rem;
+  }
+
+  .news-entry:last-child {
+    padding-bottom: 0;
+  }
+
+  .news-marker {
+    position: absolute;
+    top: 0.38rem;
+    left: -1.1rem;
+    width: 0.55rem;
+    height: 0.55rem;
+    border: 2px solid var(--nord9);
+    border-radius: 50%;
+    background: var(--nord0);
+    box-shadow: 0 0 0 3px rgba(46, 52, 64, 0.9);
+  }
+
+  .news-content {
+    display: grid;
+    gap: 0.35rem;
   }
 
   .news-date {
@@ -252,8 +405,6 @@ import Base from '../layouts/Base.astro';
     letter-spacing: 0.04em;
     color: var(--muted);
     white-space: nowrap;
-    flex-shrink: 0;
-    width: 4.5rem;
   }
 
   .news-text {
@@ -261,6 +412,69 @@ import Base from '../layouts/Base.astro';
     color: #D8DEE9;
     line-height: 1.5;
     font-weight: 300;
+  }
+
+  .news-image {
+    display: block;
+    width: min(100%, 22rem);
+    max-height: 14rem;
+    margin-top: 0.35rem;
+    object-fit: cover;
+    border: 1px solid rgba(143, 188, 187, 0.22);
+    border-radius: 7px;
+  }
+
+  .news-timeline.is-animated .news-entry:not([data-revealed]) {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+
+  .news-empty {
+    padding: 1.5rem 0;
+    color: var(--muted);
+    font-size: 0.78rem;
+    text-align: center;
+  }
+
+  .news-link {
+    justify-self: start;
+    color: var(--accent2);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    border-bottom: 1px solid rgba(143, 188, 187, 0.35);
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .news-link:hover {
+    color: var(--fg);
+    border-color: var(--accent);
+  }
+
+  @media (max-width: 760px) {
+    .site-nav {
+      right: 1.25rem;
+      left: 1.25rem;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .site-nav a {
+      font-size: 0.66rem;
+    }
+
+    main {
+      padding: 6rem 1.25rem 2rem;
+    }
+
+    .content {
+      margin-left: 0;
+    }
+
+    .identity-col {
+      position: static;
+      align-self: center;
+    }
   }
 </style>
 
@@ -455,7 +669,6 @@ type EdgeObj  = { act: number; head: number; dir: 1 | -1 | 0; base: number };
 
 let modeIdx   = Math.floor(Math.random() * MODES.length);
 let mode      = MODES[modeIdx];
-let labelText = mode.name;
 
 // Resting brightness for neural/distributed nodes (axiom mode nodes start invisible)
 const NODE_DIM = 0.3;
@@ -463,7 +676,6 @@ const NODE_DIM = 0.3;
 const nodes: NodeObj[] = mode.pos.map(([x, y]) => ({
   x, y, bright: mode !== MODES[0] ? NODE_DIM : 0, pulse: 0, ghost: 0,
 }));
-const label: { alpha: number } = { alpha: 0 };
 
 let inTransition = false; // suppresses all amber rendering during mode morphs
 let neuralCycleStart = 0; // Date.now() when current neural loop began; 0 when not in neural mode
@@ -580,15 +792,6 @@ function frame() {
     }
   }
 
-  if (label.alpha > 0.01) {
-    ctx.save();
-    ctx.font      = '500 10px Inter, system-ui, sans-serif';
-    ctx.fillStyle = `rgba(94,129,172,${label.alpha * 0.5})`;
-    (ctx as any).letterSpacing = '0.18em';
-    ctx.fillText(labelText.toUpperCase(), 32, H - 30);
-    ctx.restore();
-  }
-
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
@@ -629,8 +832,6 @@ function runCycle(anime: any) {
             renderEdges = mode.edges;
             edgeObjs    = mode.edges.map((): EdgeObj => ({ act: 0, head: 0, dir: 0, base: 1 }));
             nodes.forEach((n, i) => { n.x = mode.pos[i][0]; n.y = mode.pos[i][1]; n.bright = mode !== MODES[0] ? NODE_DIM : 0; n.pulse = 0; n.ghost = 0; });
-            label.alpha = 0;
-            labelText   = mode.name;
             startMode(anime);
           },
         })
@@ -643,8 +844,7 @@ function runCycle(anime: any) {
           easing:   'easeInOutCubic',
           begin:    () => { inTransition = true; },
         }, HOLD_DUR)
-        .add({ targets: edgeObjs, act: 0, head: 0, duration: TRANS_DUR,       easing: 'easeInOutCubic' }, HOLD_DUR)
-        .add({ targets: label,    alpha: 0,         duration: TRANS_DUR * 0.6, easing: 'easeInOutCubic' }, HOLD_DUR);
+        .add({ targets: edgeObjs, act: 0, head: 0, duration: TRANS_DUR, easing: 'easeInOutCubic' }, HOLD_DUR);
       }
     },
   });
@@ -704,7 +904,6 @@ function runCycle(anime: any) {
   }
 
   addSweep(0);
-  tl.add({ targets: label, alpha: 1, duration: 600, easing: 'easeOutExpo' }, 0);
 }
 
 // ================================================================
@@ -819,8 +1018,6 @@ function runMathCycle(anime: any) {
       renderEdges = mode.edges;
       edgeObjs    = mode.edges.map((): EdgeObj => ({ act: 0, head: 0, dir: 0, base: 1 }));
       nodes.forEach((n, i) => { n.x = mode.pos[i][0]; n.y = mode.pos[i][1]; n.bright = mode !== MODES[0] ? NODE_DIM : 0; n.pulse = 0; n.ghost = 0; });
-      label.alpha = 0;
-      labelText   = mode.name;
       startMode(anime);
     },
   });
@@ -852,8 +1049,6 @@ function runMathCycle(anime: any) {
     tl.add({ targets: [n], pulse: 0,                      duration: 1400, easing: 'easeOutCubic' }, time + SIGNAL_STEP + 350);
   });
 
-  tl.add({ targets: label, alpha: 1, duration: 600, easing: 'easeOutExpo' }, 0);
-
   const signalEnd = events.length > 0
     ? events[events.length - 1].time + SIGNAL_STEP + 350
     : 700;
@@ -871,8 +1066,7 @@ function runMathCycle(anime: any) {
     begin:    () => { inTransition = true; },
   }, holdEnd);
 
-  tl.add({ targets: edgeObjs, act: 0, head: 0, duration: TRANS_DUR,       easing: 'easeInOutCubic' }, holdEnd);
-  tl.add({ targets: label,    alpha: 0,         duration: TRANS_DUR * 0.6, easing: 'easeInOutCubic' }, holdEnd);
+  tl.add({ targets: edgeObjs, act: 0, head: 0, duration: TRANS_DUR, easing: 'easeInOutCubic' }, holdEnd);
 }
 
 // ================================================================
@@ -943,8 +1137,6 @@ function runDistCycle(anime: any) {
       renderEdges = mode.edges;
       edgeObjs    = mode.edges.map((): EdgeObj => ({ act: 0, head: 0, dir: 0, base: 1 }));
       nodes.forEach((n, i) => { n.x = mode.pos[i][0]; n.y = mode.pos[i][1]; n.bright = mode !== MODES[0] ? NODE_DIM : 0; n.pulse = 0; n.ghost = 0; });
-      label.alpha = 0;
-      labelText   = mode.name;
       startMode(anime);
     },
   });
@@ -973,9 +1165,6 @@ function runDistCycle(anime: any) {
     tl.add({ targets: [eo], act: 0,   duration: 1600, easing: 'easeOutCubic' }, arrived + 1);
   }
 
-  tl.add({ targets: label, alpha: 1, duration: 600, easing: 'easeOutExpo' }, 0);
-  tl.add({ targets: label, alpha: 1, duration: 1 }, DIST_HOLD - 1); // ensure timeline reaches holdEnd
-
   tl.add({
     targets:  nodes,
     x:        (_: NodeObj, i: number) => nextMode.pos[i][0],
@@ -985,8 +1174,7 @@ function runDistCycle(anime: any) {
     easing:   'easeInOutCubic',
     begin:    () => { inTransition = true; },
   }, DIST_HOLD);
-  tl.add({ targets: edgeObjs, act: 0, head: 0, duration: TRANS_DUR,       easing: 'easeInOutCubic' }, DIST_HOLD);
-  tl.add({ targets: label,    alpha: 0,         duration: TRANS_DUR * 0.6, easing: 'easeInOutCubic' }, DIST_HOLD);
+  tl.add({ targets: edgeObjs, act: 0, head: 0, duration: TRANS_DUR, easing: 'easeInOutCubic' }, DIST_HOLD);
 }
 
 function startMode(anime: any) {
@@ -1009,6 +1197,97 @@ animeScript.onload = () => {
   anime({ targets: '.char',     opacity: [0,1], translateY: [40,0],  duration: 900, easing: 'easeOutExpo', delay: anime.stagger(55, { start: 300 }) });
   anime({ targets: '.tagline',  opacity: [0,1], translateY: [8,0],   duration: 700, easing: 'easeOutExpo', delay: 950 });
   anime({ targets: '.nav-link', opacity: [0,1], translateX: [-10,0], duration: 600, easing: 'easeOutExpo', delay: anime.stagger(80, { start: 1150 }) });
+
+  const newsTimeline = document.querySelector<HTMLElement>('.news-timeline');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (newsTimeline) {
+    const entries = Array.from(newsTimeline.querySelectorAll<HTMLElement>('.news-entry'));
+    const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.news-tab'));
+    const emptyState = newsTimeline.querySelector<HTMLElement>('.news-empty');
+
+    const applyNewsFilter = (filter: string) => {
+      const visible = entries.filter((entry) =>
+        filter === 'all' || entry.dataset.newsCategory === filter
+      );
+
+      entries.forEach((entry) => {
+        entry.hidden = !visible.includes(entry);
+      });
+      if (emptyState) emptyState.hidden = visible.length > 0;
+      newsTimeline.scrollTop = 0;
+
+      if (!reduceMotion && visible.length > 0) {
+        visible.forEach((entry) => { entry.dataset.revealed = 'true'; });
+        anime.remove(visible);
+        anime({
+          targets: visible,
+          opacity: [0, 1],
+          translateX: [12, 0],
+          duration: 500,
+          delay: anime.stagger(55),
+          easing: 'easeOutCubic',
+        });
+      }
+    };
+
+    tabs.forEach((tab, tabIndex) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach((candidate) => {
+          const selected = candidate === tab;
+          candidate.setAttribute('aria-selected', String(selected));
+          candidate.tabIndex = selected ? 0 : -1;
+        });
+        applyNewsFilter(tab.dataset.newsFilter ?? 'all');
+      });
+
+      tab.addEventListener('keydown', (event) => {
+        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+        event.preventDefault();
+        const direction = event.key === 'ArrowRight' ? 1 : -1;
+        const nextIndex = (tabIndex + direction + tabs.length) % tabs.length;
+        tabs[nextIndex].focus();
+        tabs[nextIndex].click();
+      });
+    });
+  }
+
+  if (newsTimeline && !reduceMotion && 'IntersectionObserver' in window) {
+    const entries = Array.from(newsTimeline.querySelectorAll<HTMLElement>('.news-entry'));
+    newsTimeline.classList.add('is-animated');
+
+    const observer = new IntersectionObserver((observed) => {
+      observed.forEach((item, index) => {
+        if (!item.isIntersecting) return;
+
+        const entry = item.target as HTMLElement;
+        if (entry.dataset.revealed) {
+          observer.unobserve(entry);
+          return;
+        }
+        entry.dataset.revealed = 'true';
+        anime({
+          targets: entry,
+          opacity: [0, 1],
+          translateX: [14, 0],
+          duration: 650,
+          delay: index * 70,
+          easing: 'easeOutCubic',
+        });
+        anime({
+          targets: entry.querySelector('.news-marker'),
+          scale: [0.35, 1],
+          backgroundColor: ['#EBCB8B', '#2E3440'],
+          duration: 700,
+          delay: index * 70,
+          easing: 'easeOutBack',
+        });
+        observer.unobserve(entry);
+      });
+    }, { root: newsTimeline, threshold: 0.15 });
+
+    entries.forEach((entry) => observer.observe(entry));
+  }
 
   startMode(anime);
 };

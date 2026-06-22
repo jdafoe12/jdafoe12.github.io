@@ -7,14 +7,14 @@ interface Props {
 }
 const { title, description } = Astro.props;
 ---
-<Base title={`${title} — Your Name`} description={description}>
+<Base title={`${title} — Josh Dafoe`} description={description}>
   <div class="page">
     <header>
-      <a href="/" class="home-link">Your Name</a>
+      <a href="/" class="home-link">Josh Dafoe</a>
       <nav>
         <a href="/publications">publications</a>
-        <a href="/cv">cv</a>
-        <a href="/notes">notes</a>
+        <a href="/essays">essays</a>
+        <a href="/misc">misc</a>
       </nav>
     </header>
 
@@ -54,7 +54,7 @@ const { title, description } = Astro.props;
 
   nav {
     display: flex;
-    gap: 2rem;
+    gap: clamp(1rem, 3vw, 2rem);
   }
 
   nav a {
@@ -67,5 +67,18 @@ const { title, description } = Astro.props;
 
   nav a:hover {
     color: var(--fg);
+  }
+
+  @media (max-width: 620px) {
+    header {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    nav {
+      width: 100%;
+      overflow-x: auto;
+    }
   }
 </style>

@@ -65,11 +65,12 @@ Layer sizes: 3 → 7 → 7 → 5 → 3. Edges are sparse (~3–5 connections per
 adjacent layer).
 
 **Behaviour**: forward passes loop indefinitely. Each pass sweeps activation dots left to
-right, layer by layer (~7.5 s per pass at `SIGNAL_STEP = 1800 ms`). When a pass
+right, layer by layer (~9 s per pass at `SIGNAL_STEP = 1800 ms`). When a pass
 completes, if at least `NEURAL_TOTAL = 30 s` of wall time has elapsed since the mode
 started, the mode holds then transitions; otherwise nodes and edges dim back to resting
 state over 1.2 s and another pass fires immediately. The number of passes is not fixed —
-it depends on how many fit into 30 s of real time.
+it depends on how many whole passes fit into 30 s of real time. Because elapsed time is
+checked only after a pass completes, the active period can exceed 30 s by up to one pass.
 
 All nodes and edges are visible at rest (nodes at `NODE_DIM = 0.3` brightness, edges
 at 9% opacity) so the full structure is always legible.
@@ -82,18 +83,23 @@ Nodes scatter to a seeded quasi-random arrangement (5 × 5 jittered grid, fixed 
 Each node connects to its 4 nearest neighbours; the result is a connected, decentralised
 graph with no privileged centre.
 
-**Behaviour**: gossip propagation with randomised TTL. Throughout the hold period,
-spontaneous messages are initiated at random nodes every ~1.6 s (±50%):
+**Behaviour**: gossip propagation with randomised TTL. During the first 80% of the hold
+period, spontaneous messages are initiated at random nodes. The first starts after a
+random 0.2–1.0 s delay; subsequent starts are spaced 0.32–3.2 s apart:
 
-- Each message is born with a TTL drawn uniformly from {1, 2, 3}.
-- The initiating node always forwards to 1–N of its neighbours (uniform over count).
-- When a message arrives at a node, if TTL > 0 the node forwards to 1–N eligible
-  neighbours (excluding the sender) with equal probability over count, and passes
-  TTL − 1. If TTL = 0 the message terminates here.
+- Each message is born with a TTL drawn uniformly from {1, 2, 3}; the first outgoing hop
+  carries TTL − 1.
+- The initiating node flashes and forwards to 1–N of its neighbours (uniform over count).
+- When a hop with TTL > 0 arrives before the hold ends, its destination flashes and
+  forwards to 1–N eligible neighbours (excluding the sender), passing TTL − 1.
+- A hop with TTL = 0 still animates to its destination, but terminates without flashing
+  that destination. A hop arriving after the hold ends also causes no flash or forwarding.
 - Multiple independent message chains run concurrently; the same edge may carry
   different messages at different times.
 - Touched nodes flash amber and fade back to resting brightness; they are not
   permanently "activated."
+- Each hop takes a random 65–135% of `SIGNAL_STEP` (1.17–2.43 s) and uses
+  `easeInOutSine`, giving the distributed signals varied, non-constant motion.
 
 The distributed mode hold period is 2.5× longer than the other modes (`DIST_HOLD =
 HOLD_DUR × 2.5 ≈ 20 s`) to allow enough gossip activity to be visible.
@@ -106,7 +112,7 @@ All nodes and edges are visible at rest (same as neural).
 
 | Constant      | Value  | Meaning                                          |
 |---------------|--------|--------------------------------------------------|
-| `SIGNAL_STEP` | 1800 ms | Time for one signal dot to travel one edge      |
+| `SIGNAL_STEP` | 1800 ms | Exact axiom/neural hop time; base for distributed hops |
 | `HOLD_DUR`    | 8000 ms | Hold after signal completes (axiom + neural)    |
 | `DIST_HOLD`   | 20000 ms | Hold for distributed mode                      |
 | `TRANS_DUR`   | 5000 ms | Duration of node position morph to next mode   |
@@ -145,11 +151,11 @@ Node color interpolates `DIM → ACTIVE` via `bright`, then `→ SIGNAL` via `pu
 
 | State            | Brightness | Radius                    |
 |------------------|------------|---------------------------|
-| Rest (neural/dist)| `NODE_DIM = 0.3` | ~4.1 px            |
+| Rest (neural/dist)| `NODE_DIM = 0.3` | 3.95 px            |
 | Fully active     | 1.0        | 5 px                      |
-| Signal peak      | 1.0 + pulse| up to 7 px + amber halo   |
+| Signal peak      | 1.0 + pulse| up to 5.8 px + amber halo |
 | Axiom rest       | 0 (invisible) | —                      |
-| Ghost ring       | —          | 4.5 px unfilled stroke, 18% opacity |
+| Ghost ring       | —          | 3.5 px unfilled stroke, 25% opacity |
 
 ### Edges
 
@@ -164,10 +170,16 @@ Node color interpolates `DIM → ACTIVE` via `bright`, then `→ SIGNAL` via `pu
 
 While a signal is in transit along an edge:
 - A **lit trail** (Nord10, 28% opacity, 1 px) runs from the source to the dot.
-- An **amber dot** (Nord13, 70% opacity, 3.5 px) sits at the head.
-- A **radial glow** (12 px radius, amber, 22% → 0%) halos the dot.
-- Travel takes exactly `SIGNAL_STEP` (1800 ms) at constant speed.
+- An **amber dot** (Nord13, 30% opacity, 2.5 px radius) sits at the head.
+- A **radial glow** (8 px radius, amber, 6% → 0%) halos the dot.
+- Axiom and neural travel takes exactly `SIGNAL_STEP` (1800 ms) at constant speed.
+  Distributed travel is randomised to 65–135% of that duration and eased with
+  `easeInOutSine`.
 - All amber is hidden during mode morphs (`inTransition = true`).
+
+Pulsing nodes also receive a radial amber halo. Its radius is four times the current
+node radius and its centre opacity is `pulse × 0.04` (1.6% at the implemented peak
+`pulse = 0.4`).
 
 ---
 

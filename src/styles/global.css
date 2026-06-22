@@ -17,9 +17,9 @@
 
   --bg: var(--nord0);
   --fg: var(--nord6);
-  --muted: var(--nord3);
+  --muted: var(--nord9);
   --accent: var(--nord8);
-  --accent2: var(--nord9);
+  --accent2: var(--nord7);
 }
 
 *, *::before, *::after {
@@ -30,6 +30,7 @@
 
 html {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 18px;
   background: var(--bg);
   color: var(--fg);
   -webkit-font-smoothing: antialiased;

@@ -1,0 +1,113 @@
+---
+import Academic from '../layouts/Academic.astro';
+
+interface EssayModule {
+  frontmatter: {
+    title: string;
+    description: string;
+    date: Date | string;
+    topics?: string[];
+  };
+}
+
+const modules = import.meta.glob<EssayModule>('../content/essays/*.md', { eager: true });
+const essays = Object.entries(modules)
+  .map(([path, essay]) => ({
+    slug: path.split('/').pop()!.replace(/\.md$/, ''),
+    ...essay.frontmatter,
+    date: new Date(essay.frontmatter.date),
+  }))
+  .sort((a, b) => b.date.getTime() - a.date.getTime());
+---
+<Academic title="Essays" description="Essays by Josh Dafoe on mathematics, computing, and related ideas.">
+  <header class="page-header">
+    <h1>Essays</h1>
+  </header>
+
+  <section class="essay-list" aria-label="Published essays">
+    {essays.map((essay) => (
+      <article>
+        <time datetime={essay.date.toISOString()}>
+          {essay.date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            timeZone: 'UTC',
+          })}
+        </time>
+        <h2><a href={`/essays/${essay.slug}`}>{essay.title}</a></h2>
+        <p>{essay.description}</p>
+        {essay.topics && (
+          <ul aria-label="Topics">
+            {essay.topics.map((topic) => <li>{topic}</li>)}
+          </ul>
+        )}
+      </article>
+    ))}
+  </section>
+</Academic>
+
+<style>
+  .page-header {
+    margin-bottom: 3rem;
+  }
+
+  h1 {
+    margin-bottom: 0.75rem;
+    color: var(--fg);
+    font-size: 1.8rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  .essay-list article {
+    padding: 1.6rem 0;
+    border-top: 1px solid rgba(94, 129, 172, 0.14);
+  }
+
+  time {
+    color: var(--muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 0.45rem 0 0.55rem;
+    color: var(--fg);
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  h2 a {
+    transition: color 0.2s;
+  }
+
+  h2 a:hover {
+    color: var(--accent2);
+  }
+
+  article > p {
+    max-width: 620px;
+    color: var(--nord4);
+    font-size: 0.82rem;
+    line-height: 1.65;
+  }
+
+  article ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.8rem;
+    list-style: none;
+  }
+
+  article li {
+    padding: 0.2rem 0.5rem;
+    border: 1px solid rgba(129, 161, 193, 0.22);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.65rem;
+  }
+</style>

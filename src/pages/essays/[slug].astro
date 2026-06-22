@@ -1,0 +1,33 @@
+---
+import Essay from '../../layouts/Essay.astro';
+
+interface EssayModule {
+  Content: any;
+  frontmatter: {
+    title: string;
+    description: string;
+    date: Date | string;
+    topics?: string[];
+  };
+}
+
+const modules = import.meta.glob<EssayModule>('../../content/essays/*.md', { eager: true });
+
+export function getStaticPaths() {
+  const essayModules = import.meta.glob('../../content/essays/*.md', { eager: true });
+  return Object.keys(essayModules).map((path) => ({
+    params: { slug: path.split('/').pop()!.replace(/\.md$/, '') },
+  }));
+}
+
+const modulePath = Object.keys(modules).find((path) =>
+  path.endsWith(`/${Astro.params.slug}.md`)
+);
+
+if (!modulePath) throw new Error(`Essay not found: ${Astro.params.slug}`);
+
+const { Content, frontmatter } = modules[modulePath];
+---
+<Essay {...frontmatter}>
+  <Content />
+</Essay>

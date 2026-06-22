@@ -1,0 +1,275 @@
+---
+import Academic from './Academic.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date | string;
+  topics?: string[];
+}
+
+const { title, description, date, topics = [] } = Astro.props;
+const publishedDate = new Date(date);
+const formattedDate = publishedDate.toLocaleDateString('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+---
+<Academic title={title} description={description}>
+  <article class="essay">
+    <header class="essay-header">
+      <a class="back-link" href="/essays">← All essays</a>
+      <h1>{title}</h1>
+      <p class="description">{description}</p>
+      <div class="metadata">
+        <time datetime={publishedDate.toISOString()}>{formattedDate}</time>
+        {topics.length > 0 && (
+          <ul aria-label="Topics">
+            {topics.map((topic) => <li>{topic}</li>)}
+          </ul>
+        )}
+      </div>
+    </header>
+
+    <div class="prose">
+      <slot />
+    </div>
+  </article>
+
+  <script is:inline>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']],
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+      },
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</Academic>
+
+<style>
+  .essay-header {
+    margin-bottom: 3.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(94, 129, 172, 0.16);
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover {
+    color: var(--fg);
+  }
+
+  h1 {
+    max-width: 680px;
+    margin-bottom: 1rem;
+    color: var(--fg);
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+  }
+
+  .description {
+    max-width: 620px;
+    color: var(--nord4);
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .metadata {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.8rem 1.25rem;
+    margin-top: 1.25rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+  }
+
+  .metadata ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+  }
+
+  .metadata li {
+    padding: 0.22rem 0.52rem;
+    border: 1px solid rgba(129, 161, 193, 0.24);
+    border-radius: 999px;
+  }
+
+  .prose {
+    color: var(--nord4);
+    font-size: 0.92rem;
+    line-height: 1.85;
+  }
+
+  .prose :global(h2),
+  .prose :global(h3),
+  .prose :global(h4),
+  .prose :global(h5) {
+    color: var(--fg);
+    font-weight: 500;
+    line-height: 1.3;
+    scroll-margin-top: 2rem;
+  }
+
+  .prose :global(h2) {
+    margin: 3.6rem 0 1.2rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid rgba(94, 129, 172, 0.16);
+    font-size: 1.45rem;
+  }
+
+  .prose :global(h3) {
+    margin: 2.8rem 0 1rem;
+    font-size: 1.2rem;
+  }
+
+  .prose :global(p) {
+    margin: 1.1rem 0;
+  }
+
+  .prose :global(a) {
+    color: var(--accent2);
+    text-decoration: underline;
+    text-decoration-color: rgba(143, 188, 187, 0.38);
+    text-underline-offset: 0.18em;
+    transition: color 0.2s, text-decoration-color 0.2s;
+  }
+
+  .prose :global(a:hover) {
+    color: var(--fg);
+    text-decoration-color: var(--accent);
+  }
+
+  .prose :global(blockquote) {
+    margin: 1.6rem 0;
+    padding: 0.3rem 0 0.3rem 1.25rem;
+    border-left: 3px solid var(--nord9);
+    color: var(--nord5);
+    font-size: 0.88rem;
+  }
+
+  .prose :global(blockquote p:first-child) {
+    margin-top: 0;
+  }
+
+  .prose :global(blockquote p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .prose :global(blockquote:has(strong:first-child)) {
+    margin: 1.5rem 0;
+    padding: 1rem 1.15rem;
+    border: 1px solid rgba(143, 188, 187, 0.2);
+    border-left: 3px solid var(--nord7);
+    border-radius: 0 8px 8px 0;
+    background: rgba(59, 66, 82, 0.28);
+  }
+
+  .prose :global(blockquote strong:first-child) {
+    color: var(--nord7);
+  }
+
+  .prose :global(.portrait-grid) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 0 0 2.5rem;
+  }
+
+  .prose :global(.portrait-grid figure) {
+    margin: 0;
+    text-align: center;
+  }
+
+  .prose :global(.portrait-grid img) {
+    width: 100%;
+    height: 11rem;
+    object-fit: cover;
+    object-position: top;
+    border: 1px solid rgba(129, 161, 193, 0.18);
+    border-radius: 8px;
+    filter: saturate(0.82);
+  }
+
+  .prose :global(.portrait-grid figcaption) {
+    margin-top: 0.45rem;
+    color: var(--muted);
+    font-size: 0.68rem;
+  }
+
+  .prose :global(hr) {
+    height: 1px;
+    margin: 3rem 0;
+    border: 0;
+    background: rgba(94, 129, 172, 0.16);
+  }
+
+  .prose :global(ol),
+  .prose :global(ul) {
+    margin: 1rem 0 1rem 1.4rem;
+  }
+
+  .prose :global(li) {
+    margin: 0.45rem 0;
+  }
+
+  .prose :global(.references) {
+    font-size: 0.78rem;
+    line-height: 1.65;
+  }
+
+  .prose :global(.footnotes) {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(94, 129, 172, 0.16);
+    font-size: 0.72rem;
+    line-height: 1.6;
+  }
+
+  .prose :global(.footnotes .sr-only) {
+    position: static;
+    margin: 0 0 1rem;
+    padding: 0;
+    border: 0;
+    font-size: 1rem;
+    clip: auto;
+  }
+
+  .prose :global(sup) {
+    line-height: 0;
+  }
+
+  .prose :global(.math-display),
+  .prose :global(mjx-container[display='true']) {
+    margin: 1.5rem 0 !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  @media (max-width: 560px) {
+    .prose :global(.portrait-grid) {
+      gap: 0.55rem;
+    }
+
+    .prose :global(.portrait-grid img) {
+      height: 8rem;
+    }
+  }
+</style>

@@ -1,120 +1,251 @@
 ---
 import Academic from '../layouts/Academic.astro';
+import { frontmatter as publicationData } from '../content/publications.md';
+
+interface PublicationLink {
+  label: string;
+  url: string;
+}
+
+interface Publication {
+  year: number;
+  title: string;
+  authors: string[];
+  venue: string;
+  distinction?: string;
+  links?: PublicationLink[];
+}
+
+interface PublicationPage {
+  title: string;
+  scholarUrl: string;
+}
+
+const page = publicationData.page as PublicationPage;
+const sections = [
+  {
+    title: 'Journal Papers',
+    entries: publicationData.journalPapers as Publication[],
+    compact: false,
+  },
+  {
+    title: 'Conference Papers',
+    entries: publicationData.conferencePapers as Publication[],
+    compact: false,
+  },
+  {
+    title: 'Extended Abstracts & Posters',
+    entries: publicationData.abstractsAndPosters as Publication[],
+    compact: true,
+  },
+].map((section) => ({
+  ...section,
+  entries: [...(section.entries ?? [])].sort((a, b) => b.year - a.year),
+}));
+
+function authorSeparator(index: number, total: number) {
+  if (index === total - 1) return '';
+  if (index === total - 2) return total === 2 ? ' and ' : ', and ';
+  return ', ';
+}
 ---
-<Academic title="Publications">
-  <h1 class="page-title">Publications</h1>
+<Academic title={page.title} description="Publications by Josh Dafoe.">
+  <header class="page-header">
+    <div>
+      <h1>{page.title}</h1>
+    </div>
+    <a class="scholar-link" href={page.scholarUrl} target="_blank" rel="noopener">
+      Google Scholar ↗
+    </a>
+  </header>
 
-  <section class="pub-section">
-    <h2 class="year">2026</h2>
+  {sections.map((section) => (
+    <section class="publication-section">
+      <h2>{section.title}</h2>
 
-    <article class="pub">
-      <p class="pub-title">Title of Your Paper</p>
-      <p class="pub-authors"><strong>Your Name</strong>, Co-author One, Co-author Two</p>
-      <p class="pub-venue">Conference / Journal Name, 2026</p>
-      <div class="pub-links">
-        <a href="#">pdf</a>
-        <a href="#">arXiv</a>
-        <a href="#">code</a>
-      </div>
-    </article>
+      {section.entries.map((publication) => (
+        <article class:list={['publication', { compact: section.compact }]}>
+          <div class="publication-year">{publication.year}</div>
+          <div>
+            <div class="title-row">
+              <h3>{publication.title}</h3>
+              {publication.distinction && (
+                <span class="distinction">{publication.distinction}</span>
+              )}
+            </div>
 
-    <article class="pub">
-      <p class="pub-title">Another Paper Title</p>
-      <p class="pub-authors">Co-author One, <strong>Your Name</strong>, Co-author Two</p>
-      <p class="pub-venue">Workshop Name @ Conference, 2026</p>
-      <div class="pub-links">
-        <a href="#">pdf</a>
-        <a href="#">arXiv</a>
-      </div>
-    </article>
-  </section>
+            <p class="authors">
+              {publication.authors.map((author, index) => (
+                <>
+                  {author === 'Josh Dafoe' ? <strong>{author}</strong> : author}
+                  {authorSeparator(index, publication.authors.length)}
+                </>
+              ))}
+            </p>
 
-  <section class="pub-section">
-    <h2 class="year">2025</h2>
+            <p class="venue">{publication.venue}</p>
 
-    <article class="pub">
-      <p class="pub-title">Earlier Paper Title</p>
-      <p class="pub-authors"><strong>Your Name</strong>, Co-author One</p>
-      <p class="pub-venue">Journal of Something, 2025</p>
-      <div class="pub-links">
-        <a href="#">pdf</a>
-        <a href="#">code</a>
-      </div>
-    </article>
-  </section>
+            {publication.links && publication.links.length > 0 && (
+              <div class="links">
+                {publication.links.map((link) => (
+                  <a href={link.url} target="_blank" rel="noopener">{link.label} ↗</a>
+                ))}
+              </div>
+            )}
+          </div>
+        </article>
+      ))}
+    </section>
+  ))}
 </Academic>
 
 <style>
-  .page-title {
-    font-size: 1.6rem;
-    font-weight: 400;
-    color: var(--fg);
-    margin-bottom: 3rem;
-    letter-spacing: -0.01em;
-  }
-
-  .pub-section {
-    margin-bottom: 3rem;
-  }
-
-  .year {
-    font-size: 0.70rem;
-    font-weight: 500;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(94, 129, 172, 0.10);
-  }
-
-  .pub {
-    padding: 1.1rem 0;
-    border-bottom: 1px solid rgba(94, 129, 172, 0.06);
-  }
-
-  .pub:last-child {
-    border-bottom: none;
-  }
-
-  .pub-title {
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--fg);
-    margin-bottom: 0.35rem;
-    line-height: 1.4;
-  }
-
-  .pub-authors {
-    font-size: 0.82rem;
-    color: var(--muted);
-    margin-bottom: 0.2rem;
-  }
-
-  .pub-venue {
-    font-size: 0.80rem;
-    color: var(--accent2);
-    margin-bottom: 0.6rem;
-    font-style: italic;
-  }
-
-  .pub-links {
+  .page-header {
     display: flex;
-    gap: 1rem;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 3.5rem;
   }
 
-  .pub-links a {
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-    border-bottom: 1px solid rgba(94, 129, 172, 0.25);
-    padding-bottom: 1px;
+  h1 {
+    margin-bottom: 0.65rem;
+    color: var(--fg);
+    font-size: 1.8rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  .scholar-link {
+    flex: 0 0 auto;
+    padding-bottom: 0.16rem;
+    border-bottom: 1px solid rgba(143, 188, 187, 0.4);
+    color: var(--accent2);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
     transition: color 0.2s, border-color 0.2s;
   }
 
-  .pub-links a:hover {
+  .scholar-link:hover {
     color: var(--fg);
-    border-color: var(--fg);
+    border-color: var(--accent);
+  }
+
+  .publication-section {
+    margin-bottom: 4rem;
+  }
+
+  .publication-section > h2 {
+    margin-bottom: 0.45rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid rgba(129, 161, 193, 0.22);
+    color: var(--muted);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .publication {
+    display: grid;
+    grid-template-columns: 3.4rem minmax(0, 1fr);
+    gap: 1.1rem;
+    padding: 1.45rem 0;
+    border-bottom: 1px solid rgba(94, 129, 172, 0.1);
+  }
+
+  .publication-year {
+    padding-top: 0.16rem;
+    color: var(--muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+  }
+
+  h3 {
+    color: var(--fg);
+    font-size: 0.94rem;
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  .title-row {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .title-row h3 {
+    flex: 1 1 380px;
+  }
+
+  .distinction {
+    flex: 0 0 auto;
+    padding: 0.22rem 0.48rem;
+    border: 1px solid rgba(235, 203, 139, 0.35);
+    border-radius: 999px;
+    color: var(--nord13);
+    font-size: 0.62rem;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+
+  .authors {
+    margin-top: 0.38rem;
+    color: var(--nord4);
+    font-size: 0.76rem;
+    line-height: 1.5;
+  }
+
+  .authors strong {
+    color: var(--fg);
+    font-weight: 600;
+  }
+
+  .venue {
+    margin-top: 0.25rem;
+    color: var(--accent2);
+    font-size: 0.72rem;
+    line-height: 1.5;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: 0.65rem;
+  }
+
+  .links a {
+    padding-bottom: 0.08rem;
+    border-bottom: 1px solid rgba(129, 161, 193, 0.32);
+    color: var(--muted);
+    font-size: 0.66rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .links a:hover {
+    color: var(--fg);
+    border-color: var(--accent);
+  }
+
+  .compact {
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
+  }
+
+  @media (max-width: 600px) {
+    .page-header {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .publication {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+    }
   }
 </style>
