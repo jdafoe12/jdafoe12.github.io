@@ -9,6 +9,6 @@
     "sync": "git add -A && git commit -m \"sync: $(date '+%b %d, %Y, %I:%M %p')\" && git push"
   },
   "dependencies": {
-    "astro": "^6.4.8"
+    "astro": "^7.0.3"
   }
 }
