@@ -36,6 +36,14 @@ journalPapers:
         url: "https://doi.org/10.1186/s42400-024-00287-9"
 
 conferencePapers:
+  - year: 2026
+    title: "A Runtime Decentralized Attestation and Coordinated Repair Framework for Securing Automotive ECUs"
+    authors:
+      - "Josh Dafoe"
+      - "Niusen Chen"
+      - "Bo Chen"
+    venue: "IEEE Conference on Communications and Network Security (CNS 2026), Newark, Delaware."
+
   - year: 2025
     title: "Developing MCP-based LLM Agents for Secure Autonomous Vehicle Planning"
     authors:

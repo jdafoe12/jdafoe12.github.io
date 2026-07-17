@@ -14,6 +14,9 @@
 #   imageAlt: "A concise description of the image"
 
 entries:
+  - date: "Jul 2026"
+    text: "Our paper “A Runtime Decentralized Attestation and Coordinated Repair Framework for Securing Automotive ECUs” has been accepted at CNS 2026!"
+
   - date: "Jun 2026"
     text: "Completed a full redesign of my website."
     category: "essays"
