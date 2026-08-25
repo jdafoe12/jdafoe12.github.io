@@ -1,7 +1,8 @@
 ---
 # Edit this file to update the Selected Publications page.
-# Add entries under the appropriate section: journalPapers, conferencePapers,
-# or abstractsAndPosters. The `distinction` and `links` fields are optional.
+# Add entries under the appropriate section: preprints, journalPapers,
+# conferencePapers, or abstractsAndPosters. The `distinction` and `links`
+# fields are optional.
 # Josh Dafoe is automatically emphasized when listed in `authors`.
 #
 # Example:
@@ -19,6 +20,17 @@
 page:
   title: "Publications"
   scholarUrl: "https://scholar.google.com/citations?user=GXYONycAAAAJ&hl=en"
+
+preprints:
+  - year: 2026
+    title: "SxSSD: A Secure and Extensible Software-defined Solid State Drive"
+    authors:
+      - "Josh Dafoe"
+      - "Bo Chen"
+    venue: "arXiv preprint arXiv:2608.23365, 2026."
+    links:
+      - label: "arXiv"
+        url: "https://arxiv.org/abs/2608.23365"
 
 journalPapers:
   - year: 2024

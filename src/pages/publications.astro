@@ -24,6 +24,11 @@ interface PublicationPage {
 const page = publicationData.page as PublicationPage;
 const sections = [
   {
+    title: 'Preprints',
+    entries: publicationData.preprints as Publication[],
+    compact: false,
+  },
+  {
     title: 'Journal Papers',
     entries: publicationData.journalPapers as Publication[],
     compact: false,
