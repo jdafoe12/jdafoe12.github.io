@@ -103,7 +103,11 @@ const defaultNewsCategory = 'academic';
                 <span class="news-marker" aria-hidden="true"></span>
                 <div class="news-content">
                   <time class="news-date">{entry.date}</time>
-                  <p class="news-text">{entry.text}</p>
+                  <p class="news-text">{entry.text.split(/(\*\*.+?\*\*)/g).map((part) => (
+                    part.startsWith('**') && part.endsWith('**')
+                      ? <strong>{part.slice(2, -2)}</strong>
+                      : part
+                  ))}</p>
                   {entry.url && (
                     <a class="news-link" href={entry.url} target="_blank" rel="noopener">
                       {entry.linkLabel ?? 'Read more'} <span aria-hidden="true">↗</span>

@@ -3,6 +3,7 @@
 # Keep each entry in this format. Existing entries without a category are Academic.
 # Valid categories: academic, essays, activities, open-source.
 # The `url`, `linkLabel`, `image`, and `imageAlt` lines are optional.
+# Use **bold text** in `text` to emphasize a title or phrase.
 # Put local news images in `public/images/news/` and reference them as shown below.
 #
 # - date: "Mon YYYY"
@@ -15,7 +16,7 @@
 
 entries:
   - date: "Oct 3, 2026"
-    text: "Exploring Quotients, part 1: quotient sets"
+    text: "Published **Exploring Quotients, part 1: quotient sets**, the first in a series exploring quotients in different mathematical contexts and their applications."
     category: "essays"
     url: "/essays/exploring-quotients-part-1-quotient-sets"
     linkLabel: "Read essay"
