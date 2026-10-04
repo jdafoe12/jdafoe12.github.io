@@ -119,7 +119,7 @@ Therefore, $S=f^{-1}(\\{c\\})$. Since $x\\in S$, $S$ is nonempty. Hence $S\\in F
 
 > **Definition.** Let $A, B$ be sets. The **quotient map** is the function $q: A \\rightarrow A/\\sim$ defined by $q(x) = \[x\]\_{\\sim}$.
 
-When $\\sim$ is determined by a function (i.e. $\\sim \\coloneqq \\sim\_f$ for some $f$), we have $q(x) = f^{-1}(\\{f(x)\\})$ by definition.
+When $\\sim$ is determined by a function (i.e. $\\sim = \\sim\_f$ for some $f$), we have $q(x) = f^{-1}(\\{f(x)\\})$ by definition.
 
 > **Theorem 1.4: Canonical Decomposition**
 > Let $f: A\\to B$ be a function, and define $a\\sim\_f a^{\\prime}$ if and only if $f(a)=f(a^{\\prime})$.
