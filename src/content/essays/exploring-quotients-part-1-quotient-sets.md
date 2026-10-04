@@ -49,7 +49,7 @@ Given an element $a \\in A$ and an equivalence relation $\\sim$ on $A$, we can d
 
 > **Lemma 1.1:** Let $a,b \\in A$, $\[a\]\_{\\sim} = \[b\]\_{\\sim}$ if and only if $a\\sim b$.
 
-Proof: Let $a,b,c \\in A$. Suppose that $\[a\]\_{\\sim} = \[b\]\_{\\sim}$, and $c \\in \[a\]\_{\\sim}$. Then, $a \\sim c,$ by definition. Also, $c \\in \[b\]\_{\\sim}$ (since $\[a\]\_{\\sim} = \[b\]\_{\\sim}$) which implies that $b \\sim c$. Since $\\sim$ is symmetric, we have $c \\sim b$, and now since $\\sim$ is transitive, we have $a \\sim b.$ Now, for the other direction, suppose that $a \\sim b$. Since, $\\sim$ is symmetric, we have $b \\sim a$. Now, suppose we have some $c \\in \[a\]\_{\\sim}$. Then, $a \\sim c$ and (by symmetry) $c \\sim a$. Since $\\sim$ is transitive, we have $c \\sim b$, and by symmetry $b \\sim c$. Therefore, $c \\in \[b\]\_{\\sim}$, which implies that $\[a\]\_{\\sim} \\subseteq \[b\]\_{\\sim}.$ The argument that $\[b\]\_{\\sim} \\subseteq \[a\]\_{\\sim}$ is similar, so that we have $\[a\]\_{\\sim} = \[b\]\_{\\sim}$. $\\blacksquare$
+*Proof.* Let $a,b,c \\in A$. Suppose that $\[a\]\_{\\sim} = \[b\]\_{\\sim}$, and $c \\in \[a\]\_{\\sim}$. Then, $a \\sim c,$ by definition. Also, $c \\in \[b\]\_{\\sim}$ (since $\[a\]\_{\\sim} = \[b\]\_{\\sim}$) which implies that $b \\sim c$. Since $\\sim$ is symmetric, we have $c \\sim b$, and now since $\\sim$ is transitive, we have $a \\sim b.$ Now, for the other direction, suppose that $a \\sim b$. Since, $\\sim$ is symmetric, we have $b \\sim a$. Now, suppose we have some $c \\in \[a\]\_{\\sim}$. Then, $a \\sim c$ and (by symmetry) $c \\sim a$. Since $\\sim$ is transitive, we have $c \\sim b$, and by symmetry $b \\sim c$. Therefore, $c \\in \[b\]\_{\\sim}$, which implies that $\[a\]\_{\\sim} \\subseteq \[b\]\_{\\sim}.$ The argument that $\[b\]\_{\\sim} \\subseteq \[a\]\_{\\sim}$ is similar, so that we have $\[a\]\_{\\sim} = \[b\]\_{\\sim}$. $\\blacksquare$
 
 This implies that for any element, knowing only a single relation can be sufficient to identify a set where all elements are equivalent with respect to the criteria. Then, it follows that all elements in that class are pairwise related. Indeed, we realize that an equivalence class is determined by the relations of any one of its members. Thus, we call $a$ in the notation $\[a\]\_\\sim$ a _representative_ of the equivalence class $\[a\]\_\\sim$. An equivalence class may be represented by any of its members.
 
@@ -71,7 +71,7 @@ Next, we will show that any equivalence relation determines a set partition, and
 
 > **Theorem 1.2:** Let $A$ be a set, and let $\\sim$ be an equivalence relation on $A$. Then the quotient set $A/{\\sim} = \\{\[a\]\_{\\sim} \\mid a \\in A\\}$ is a partition of $A$.
 
-Proof: For part 1, suppose we have an arbitrary element $a$ of $A$. Since $\\sim$ is reflexive, we have $a \\sim a$, so that $a \\in \[a\]\_{\\sim} \\in A/{\\sim}$. Thus, $A \\subseteq \\bigcup A/{\\sim}.$ Now, suppose we have some element $x \\in \\bigcup A/{\\sim}.$ Then there exists some $S \\in A/{\\sim}$ such that $x \\in S$. Since $S \\in A/{\\sim}$, we have $S = \[a\]\_{\\sim}$ for some $a \\in A$. Thus, $x \\in \[a\]\_{\\sim}$, so $x \\in A$. Hence, $\\bigcup A/{\\sim} \\subseteq A$.
+*Proof.* For part 1, suppose we have an arbitrary element $a$ of $A$. Since $\\sim$ is reflexive, we have $a \\sim a$, so that $a \\in \[a\]\_{\\sim} \\in A/{\\sim}$. Thus, $A \\subseteq \\bigcup A/{\\sim}.$ Now, suppose we have some element $x \\in \\bigcup A/{\\sim}.$ Then there exists some $S \\in A/{\\sim}$ such that $x \\in S$. Since $S \\in A/{\\sim}$, we have $S = \[a\]\_{\\sim}$ for some $a \\in A$. Thus, $x \\in \[a\]\_{\\sim}$, so $x \\in A$. Hence, $\\bigcup A/{\\sim} \\subseteq A$.
 
 For part 2, let $\[c\]\_{\\sim} \\in A/{\\sim}$. Since $\\sim$ is reflexive, $c \\sim c$, so that $c \\in \[c\]\_{\\sim}$. Thus, $\[c\]\_{\\sim} \\neq \\emptyset$.
 
@@ -101,7 +101,7 @@ In addition, this theorem establishes that any equivalence relation on $A$ can b
 > $$
 > Then $\\sim\_f$ is an equivalence relation on $A$. Moreover, the equivalence classes of $\\sim\_f$ are exactly the nonempty fibers of $f$.
 
-Proof: That $\\sim\_f$ is an equivalence relation follows from the fact that equality on $B$ is an equivalence relation.
+*Proof.* That $\\sim\_f$ is an equivalence relation follows from the fact that equality on $B$ is an equivalence relation.
 
 Let $F = \\{f^{-1}(\\{b\\}) \\mid b \\in B \\text{ and } f^{-1}(\\{b\\}) \\neq \\emptyset \\}$. We want to show that $F \\subseteq A/\\sim\_f$.
 
@@ -136,7 +136,7 @@ When $\\sim$ is determined by a function (i.e. $\\sim = \\sim\_f$ for some $f$),
 > A \\xrightarrow{q} A/{\\sim\_f} \\xrightarrow{\\bar f} B
 > $$
 
-Proof: First, we need to show that $\\bar f$ is a function. That is, for every $\[a\]\_{\\sim\_f} \\in A/{\\sim\_f}$, there must exist a unique $b \\in B$ such that $\\bar f(\[a\]\_{\\sim\_f})=b$. Existence follows because $f(a)\\in B$. To show uniqueness, suppose that we have $a, a^{\\prime} \\in A$ such that $\[a\]\_{\\sim\_f} = \[a^{\\prime}\]\_{\\sim\_f}.$ We have $a \\sim\_f a^{\\prime},$ and by the definition of $\\sim\_f$, this means that $f(a) = f(a^{\\prime}).$ Therefore, $\\bar f(\[a\]\_{\\sim\_f})=f(a)=f(a^{\\prime})=\\bar f(\[a^{\\prime}\]\_{\\sim\_f}).$ Hence, the value of $\\bar f(\[a\]\_{\\sim\_f})$ does not depend on the representative chosen, so $\\bar f$ is a function.
+*Proof.* First, we need to show that $\\bar f$ is a function. That is, for every $\[a\]\_{\\sim\_f} \\in A/{\\sim\_f}$, there must exist a unique $b \\in B$ such that $\\bar f(\[a\]\_{\\sim\_f})=b$. Existence follows because $f(a)\\in B$. To show uniqueness, suppose that we have $a, a^{\\prime} \\in A$ such that $\[a\]\_{\\sim\_f} = \[a^{\\prime}\]\_{\\sim\_f}.$ We have $a \\sim\_f a^{\\prime},$ and by the definition of $\\sim\_f$, this means that $f(a) = f(a^{\\prime}).$ Therefore, $\\bar f(\[a\]\_{\\sim\_f})=f(a)=f(a^{\\prime})=\\bar f(\[a^{\\prime}\]\_{\\sim\_f}).$ Hence, the value of $\\bar f(\[a\]\_{\\sim\_f})$ does not depend on the representative chosen, so $\\bar f$ is a function.
 
 Next, we want to show that $\\bar f$ is injective. Suppose we have $\\bar f(\[x\]\_{\\sim\_f}) = \\bar f(\[y\]\_{\\sim\_f})$ for $\[x\]\_{\\sim\_f},\[y\]\_{\\sim\_f} \\in A/\\sim\_f.$ By the definition of $\\bar f,$ this implies that $f(x) = f(y)$. By the definition of $\\sim\_f$, this implies that $x \\sim\_f y.$ By Lemma 1.1, it follows that $\[x\]\_{\\sim\_f} = \[y\]\_{\\sim\_f}.$ Therefore, $\\bar f$ must be injective.
 
