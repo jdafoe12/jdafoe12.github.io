@@ -14,6 +14,12 @@
 #   imageAlt: "A concise description of the image"
 
 entries:
+  - date: "Oct 3, 2026"
+    text: "Exploring Quotients, part 1: quotient sets"
+    category: "essays"
+    url: "/essays/exploring-quotients-part-1-quotient-sets"
+    linkLabel: "Read essay"
+
   - date: "Jul 2026"
     text: "Our paper “A Runtime Decentralized Attestation and Coordinated Repair Framework for Securing Automotive ECUs” has been accepted at CNS 2026!"
 
