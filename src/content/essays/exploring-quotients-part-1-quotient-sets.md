@@ -49,7 +49,7 @@ Given an element $a \\in A$ and an equivalence relation $\\sim$ on $A$, we can d
 
 > **Lemma 1.1:** Let $a,b \\in A$, $\[a\]\_{\\sim} = \[b\]\_{\\sim}$ if and only if $a\\sim b$.
 
-*Proof.* Let $a,b,c \\in A$. Suppose that $\[a\]\_{\\sim} = \[b\]\_{\\sim}$, and $c \\in \[a\]\_{\\sim}$. Then, $a \\sim c,$ by definition. Also, $c \\in \[b\]\_{\\sim}$ (since $\[a\]\_{\\sim} = \[b\]\_{\\sim}$) which implies that $b \\sim c$. Since $\\sim$ is symmetric, we have $c \\sim b$, and now since $\\sim$ is transitive, we have $a \\sim b.$ Now, for the other direction, suppose that $a \\sim b$. Since, $\\sim$ is symmetric, we have $b \\sim a$. Now, suppose we have some $c \\in \[a\]\_{\\sim}$. Then, $a \\sim c$ and (by symmetry) $c \\sim a$. Since $\\sim$ is transitive, we have $c \\sim b$, and by symmetry $b \\sim c$. Therefore, $c \\in \[b\]\_{\\sim}$, which implies that $\[a\]\_{\\sim} \\subseteq \[b\]\_{\\sim}.$ The argument that $\[b\]\_{\\sim} \\subseteq \[a\]\_{\\sim}$ is similar, so that we have $\[a\]\_{\\sim} = \[b\]\_{\\sim}$. $\\blacksquare$
+*Proof.* Let $a,b\\in A$. Suppose that $\[a\]\_{\\sim}=\[b\]\_{\\sim}$. By reflexivity, $b\\in\[b\]\_{\\sim}=\[a\]\_{\\sim}$, so $a\\sim b$ by the definition of equivalence classes. Now, for the other direction, suppose that $a \\sim b$. Since, $\\sim$ is symmetric, we have $b \\sim a$. Now, suppose we have some $c \\in \[a\]\_{\\sim}$. Then, $a \\sim c$ and (by symmetry) $c \\sim a$. Since $\\sim$ is transitive, we have $c \\sim b$, and by symmetry $b \\sim c$. Therefore, $c \\in \[b\]\_{\\sim}$, which implies that $\[a\]\_{\\sim} \\subseteq \[b\]\_{\\sim}.$ The argument that $\[b\]\_{\\sim} \\subseteq \[a\]\_{\\sim}$ is similar, so that we have $\[a\]\_{\\sim} = \[b\]\_{\\sim}$. $\\blacksquare$
 
 This implies that for any element, knowing only a single relation can be sufficient to identify a set where all elements are equivalent with respect to the criteria. Then, it follows that all elements in that class are pairwise related. Indeed, we realize that an equivalence class is determined by the relations of any one of its members. Thus, we call $a$ in the notation $\[a\]\_\\sim$ a _representative_ of the equivalence class $\[a\]\_\\sim$. An equivalence class may be represented by any of its members.
 
@@ -75,7 +75,7 @@ Next, we will show that any equivalence relation determines a set partition, and
 
 For part 2, let $\[c\]\_{\\sim} \\in A/{\\sim}$. Since $\\sim$ is reflexive, $c \\sim c$, so that $c \\in \[c\]\_{\\sim}$. Thus, $\[c\]\_{\\sim} \\neq \\emptyset$.
 
-For part 3, let $\[a\]\_{\\sim} \\in A/{\\sim}$ and $\[b\]\_{\\sim} \\in A/{\\sim}$, such that $\[a\]\_{\\sim} \\neq \[b\]\_{\\sim}$. By Lemma 1.1, $a \\not \\sim b$. Now, suppose that there is some $c \\in A$ such that $c \\in \[a\]\_{\\sim}$ and $c \\in \[b\]\_{\\sim}$. By the definition of equivalence classes, $c \\sim a$ and $c \\sim b$. Since $\\sim$ is symmetric, we also have $a \\sim c$. But, since $\\sim$ is transitive, we now have $a \\sim b$, which contradicts $a \\not \\sim b$. It follows that $\[a\]\_{\\sim}$ and $\[b\]\_{\\sim}$ must be disjoint. $\\blacksquare$
+For part 3, let $\[a\]\_{\\sim} \\in A/{\\sim}$ and $\[b\]\_{\\sim} \\in A/{\\sim}$, such that $\[a\]\_{\\sim} \\neq \[b\]\_{\\sim}$. By Lemma 1.1, $a \\not \\sim b$. Now, suppose that there is some $c \\in A$ such that $c \\in \[a\]\_{\\sim}$ and $c \\in \[b\]\_{\\sim}$. By the definition of equivalence classes, $a\\sim c$ and $b\\sim c$. Since $\\sim$ is symmetric, we also have $c\\sim b$. But, since $\\sim$ is transitive, we now have $a \\sim b$, which contradicts $a \\not \\sim b$. It follows that $\[a\]\_{\\sim}$ and $\[b\]\_{\\sim}$ must be disjoint. $\\blacksquare$
 
 Now we have the main result mentioned in the introduction: The quotient set takes a notion of equivalence and constructs a set where the equivalent elements are identified while ignoring other distinctions. As an example, let's consider $\\mathbb{Z}/\\equiv\_n,$ where $\\equiv\_n$ is the relation _congruence modulo $n$,_ and $n =3$. In this case, the notion of equivalence is having the same remainder after division by $3$. The only possible remainders are $0,1,$ and $2$, so that $\\mathbb{Z}/\\equiv\_3 = \\{\[0\]\_{\\equiv\_3},\[1\]\_{\\equiv\_3},\[2\]\_{\\equiv\_3}\\}.$ This set is typically referred to as the integers modulo $3$.
 
@@ -117,9 +117,9 @@ Now, let $y \\in f^{-1}(\\{c\\})$. By the definition of $f^{-1}(\\{c\\})$, we ha
 
 Therefore, $S=f^{-1}(\\{c\\})$. Since $x\\in S$, $S$ is nonempty. Hence $S\\in F$. Since $S$ is an arbitrary element of $A/\\sim\_f$, we have shown that $A/\\sim\_f \\subseteq F.$ Since we have shown that both $F \\subseteq A/\\sim\_f$ and $A/\\sim\_f \\subseteq F,$ we have $F = A/\\sim\_f.$ $\\blacksquare$
 
-> **Definition.** Let $A, B$ be sets. The **quotient map** is the function $q: A \\rightarrow A/\\sim$ defined by $q(x) = \[x\]\_{\\sim}$.
+> **Definition.** Let $A$ be a set, and let $\\sim$ be an equivalence relation on $A$. The **quotient map** is the function $q:A\\rightarrow A/{\\sim}$ defined by $q(x)=\[x\]\_{\\sim}$.
 
-When $\\sim$ is determined by a function (i.e. $\\sim = \\sim\_f$ for some $f$), we have $q(x) = f^{-1}(\\{f(x)\\})$ by definition.
+When $\\sim$ is determined by a function (i.e. $\\sim = \\sim\_f$ for some $f$), we have $q(x) = f^{-1}(\\{f(x)\\})$ by Theorem 1.3.
 
 > **Theorem 1.4: Canonical Decomposition**
 > Let $f: A\\to B$ be a function, and define $a\\sim\_f a^{\\prime}$ if and only if $f(a)=f(a^{\\prime})$.
