@@ -79,7 +79,7 @@ For part 3, let $\[a\]\_{\\sim} \\in A/{\\sim}$ and $\[b\]\_{\\sim} \\in A/{\\si
 
 Now we have the main result mentioned in the introduction: The quotient set takes a notion of equivalence and constructs a set where the equivalent elements are identified while ignoring other distinctions. As an example, let's consider $\\mathbb{Z}/\\equiv\_n,$ where $\\equiv\_n$ is the relation _congruence modulo $n$,_ and $n =3$. In this case, the notion of equivalence is having the same remainder after division by $3$. The only possible remainders are $0,1,$ and $2$, so that $\\mathbb{Z}/\\equiv\_3 = \\{\[0\]\_{\\equiv\_3},\[1\]\_{\\equiv\_3},\[2\]\_{\\equiv\_3}\\}.$ This set is typically referred to as the integers modulo $3$.
 
-In addition, this theorem establishes that any equivalence relation on $A$ can be defined by a partition of $A$. To show the other direction, that a partition of $A$ determines an equivalence relation on $A$, is left as an exercise.
+In addition, this theorem establishes that any equivalence relation on $A$ can determines a partition of $A$. To show the other direction, that a partition of $A$ determines an equivalence relation on $A$, is left as an exercise.
 
 > **Definition.** Let $A$ and $B$ be sets. A **function** from $A$ to $B$ is a binary relation $f \\subseteq A \\times B$ such that for every $a \\in A$, there exists a unique $b \\in B$ such that $(a,b) \\in f$. Then we write $f: A \\rightarrow B$, and instead of $afb$ or $(a,b) \\in f,$ we write $f(a) = b.$
 
