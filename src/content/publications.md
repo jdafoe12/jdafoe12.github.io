@@ -56,8 +56,12 @@ conferencePapers:
       - "Bo Chen"
     venue: "IEEE Conference on Communications and Network Security (CNS 2026), Newark, Delaware."
     links:
-      - label: "arXiv"
+      - label: "IEEE Xplore"
+        url: "https://ieeexplore.ieee.org/abstract/document/11720895"
+      - label: "Full version (arXiv)"
         url: "https://arxiv.org/abs/2608.11489v1"
+      - label: "Video (YouTube)"
+        url: "https://youtu.be/m-kQBmC00iU"
 
   - year: 2025
     title: "Developing MCP-based LLM Agents for Secure Autonomous Vehicle Planning"
