@@ -1,11 +1,14 @@
 ---
 title: "Aristotle’s Categories: Chapter 3b"
 description: "Commentary on genera, species, and their differences."
-date: 2025-06-28
+date: 2026-11-01
 series: categories
 topics:
   - Philosophy
   - Aristotle
+revisions:
+  - date: 2025-06-28
+    label: Drafted
 ---
 
 ## Introduction

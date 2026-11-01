@@ -47,7 +47,6 @@ const chapters = [
         <details class="revision-history">
           <summary>Revision history</summary>
           <ol>
-            <li><time datetime={publishedDate.toISOString()}>{formatDate(date)}</time><span>Originally posted</span></li>
             {revisions.map((revision) => (
               <li><time datetime={new Date(revision.date).toISOString()}>{formatDate(revision.date)}</time><span>{revision.label}</span></li>
             ))}

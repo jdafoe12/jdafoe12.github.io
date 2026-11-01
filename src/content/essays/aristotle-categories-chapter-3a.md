@@ -1,13 +1,14 @@
 ---
 title: "Aristotle’s Categories: Chapter 3a — Dictum de omni et nullo"
 description: "Commentary on predication, syllogistic reasoning, and abstraction."
-date: 2024-06-14
-updated: 2026-11-01
+date: 2026-11-01
 series: categories
 topics:
   - Philosophy
   - Aristotle
 revisions:
+  - date: 2024-06-14
+    label: Drafted
   - date: 2024-10-16
     label: Revised
   - date: 2025-06-26

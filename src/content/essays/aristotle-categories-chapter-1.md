@@ -1,13 +1,14 @@
 ---
 title: "Aristotle’s Categories: Chapter 1"
 description: "Commentary on homonymy, synonymy, and paronymy."
-date: 2024-06-05
-updated: 2026-11-01
+date: 2026-11-01
 series: categories
 topics:
   - Philosophy
   - Aristotle
 revisions:
+  - date: 2024-06-05
+    label: Drafted
   - date: 2024-09-28
     label: Updated
   - date: 2025-03-10

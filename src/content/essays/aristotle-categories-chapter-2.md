@@ -1,13 +1,14 @@
 ---
 title: "Aristotle’s Categories: Chapter 2"
 description: "Commentary on predication and what it means to be in a subject."
-date: 2024-06-07
-updated: 2026-11-01
+date: 2026-11-01
 series: categories
 topics:
   - Philosophy
   - Aristotle
 revisions:
+  - date: 2024-06-07
+    label: Drafted
   - date: 2026-11-01
     label: Updated
 ---
