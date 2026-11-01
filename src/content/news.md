@@ -15,6 +15,12 @@
 #   imageAlt: "A concise description of the image"
 
 entries:
+  - date: "Nov 1, 2026"
+    text: "Published four commentaries on **Aristotle’s Categories**, chapters 1–3."
+    category: "essays"
+    url: "/essays/aristotle-categories-chapter-1"
+    linkLabel: "Read the commentaries"
+
   - date: "Oct 3, 2026"
     text: "Published **Exploring Quotients, part 1: quotient sets**, the first in a series exploring quotients in different mathematical contexts and their applications."
     category: "essays"

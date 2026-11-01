@@ -6,6 +6,7 @@ interface EssayModule {
     title: string;
     description: string;
     date: Date | string;
+    updated?: Date | string;
     topics?: string[];
   };
 }
@@ -35,6 +36,7 @@ const essays = Object.entries(modules)
             timeZone: 'UTC',
           })}
         </time>
+        {essay.updated && <span class="updated"> · Updated {new Date(essay.updated).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}</span>}
         <h2><a href={`/essays/${essay.slug}`}>{essay.title}</a></h2>
         <p>{essay.description}</p>
         {essay.topics && (
@@ -65,7 +67,7 @@ const essays = Object.entries(modules)
     border-top: 1px solid rgba(94, 129, 172, 0.14);
   }
 
-  time {
+  time, .updated {
     color: var(--muted);
     font-size: 0.68rem;
     letter-spacing: 0.05em;

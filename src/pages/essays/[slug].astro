@@ -7,6 +7,9 @@ interface EssayModule {
     title: string;
     description: string;
     date: Date | string;
+    updated?: Date | string;
+    revisions?: { date: Date | string; label: string }[];
+    series?: string;
     topics?: string[];
   };
 }

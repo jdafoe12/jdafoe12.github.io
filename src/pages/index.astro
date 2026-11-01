@@ -109,8 +109,8 @@ const defaultNewsCategory = 'academic';
                       : part
                   ))}</p>
                   {entry.url && (
-                    <a class="news-link" href={entry.url} target="_blank" rel="noopener">
-                      {entry.linkLabel ?? 'Read more'} <span aria-hidden="true">↗</span>
+                    <a class="news-link" href={entry.url} target={entry.url.startsWith('/') ? undefined : '_blank'} rel={entry.url.startsWith('/') ? undefined : 'noopener'}>
+                      {entry.linkLabel ?? 'Read more'} <span aria-hidden="true">{entry.url.startsWith('/') ? '→' : '↗'}</span>
                     </a>
                   )}
                   {entry.image && (
@@ -318,26 +318,20 @@ const defaultNewsCategory = 'academic';
 
   .news-tabs {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.35rem;
-    margin-bottom: 1.2rem;
-    padding-bottom: 0.2rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  .news-tabs::-webkit-scrollbar {
-    display: none;
+    margin-bottom: 1rem;
   }
 
   .news-tab {
     flex: 0 0 auto;
     border: 1px solid rgba(129, 161, 193, 0.25);
     border-radius: 999px;
-    padding: 0.42rem 0.72rem;
+    padding: 0.32rem 0.6rem;
     background: rgba(59, 66, 82, 0.28);
     color: var(--muted);
     font: inherit;
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     letter-spacing: 0.03em;
     cursor: pointer;
     transition: color 0.2s, background 0.2s, border-color 0.2s;
@@ -370,7 +364,7 @@ const defaultNewsCategory = 'academic';
   }
 
   .news-timeline {
-    max-height: clamp(22rem, 55vh, 38rem);
+    max-height: clamp(18rem, 48vh, 28rem);
     overflow-y: auto;
     padding-right: 0.8rem;
     scrollbar-width: thin;
@@ -386,7 +380,7 @@ const defaultNewsCategory = 'academic';
 
   .news-entry {
     position: relative;
-    padding: 0 0 1.4rem 0.75rem;
+    padding: 0 0 0.9rem 0.65rem;
   }
 
   .news-entry:last-child {
@@ -407,24 +401,33 @@ const defaultNewsCategory = 'academic';
 
   .news-content {
     display: grid;
-    gap: 0.35rem;
+    grid-template-columns: 5.4rem minmax(0, 1fr);
+    align-items: baseline;
+    gap: 0.25rem 0.75rem;
   }
 
   .news-date {
-    font-size: 0.72rem;
-    letter-spacing: 0.04em;
+    grid-column: 1;
+    grid-row: 1;
+    padding-top: 0.1rem;
+    font-size: 0.65rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
     color: var(--muted);
     white-space: nowrap;
   }
 
   .news-text {
-    font-size: 0.84rem;
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 0.8rem;
     color: #D8DEE9;
-    line-height: 1.5;
+    line-height: 1.45;
     font-weight: 300;
   }
 
   .news-image {
+    grid-column: 2;
     display: block;
     width: min(100%, 22rem);
     max-height: 14rem;
@@ -447,6 +450,7 @@ const defaultNewsCategory = 'academic';
   }
 
   .news-link {
+    grid-column: 2;
     justify-self: start;
     color: var(--accent2);
     font-size: 0.7rem;
@@ -459,6 +463,26 @@ const defaultNewsCategory = 'academic';
   .news-link:hover {
     color: var(--fg);
     border-color: var(--accent);
+  }
+
+  @media (max-width: 560px) {
+    .news-card {
+      padding: 1.4rem 1.2rem;
+    }
+
+    .news-content {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.2rem;
+    }
+
+    .news-content > * {
+      grid-column: 1;
+      grid-row: auto;
+    }
+
+    .news-entry {
+      padding-bottom: 0.85rem;
+    }
   }
 
   @media (max-width: 760px) {
