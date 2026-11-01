@@ -3,7 +3,7 @@ title: "Hilbert's 1900 Address: Consistency, Completeness, and the Entscheidungs
 description: "How Hilbert's vision for mathematics led through Gödel's incompleteness theorems and the undecidability of the decision problem to the Turing machine—a theoretical precursor of the modern computer."
 date: 2024-08-08
 topics:
-  - Mathematical logic
+  - Logic
   - Computability
   - History of mathematics
 ---

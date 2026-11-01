@@ -7,7 +7,7 @@ topics:
   - Philosophy
   - Aristotle
   - Abstraction
-  - Mathematical logic
+  - Logic
 revisions:
   - date: 2025-06-28
     label: Drafted
