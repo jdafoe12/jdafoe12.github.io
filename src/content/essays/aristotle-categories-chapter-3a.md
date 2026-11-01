@@ -6,6 +6,8 @@ series: categories
 topics:
   - Philosophy
   - Aristotle
+  - Abstraction
+  - Mathematical logic
 revisions:
   - date: 2024-06-14
     label: Drafted
