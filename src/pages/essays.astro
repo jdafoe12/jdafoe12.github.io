@@ -7,6 +7,7 @@ interface EssayModule {
     description: string;
     date: Date | string;
     updated?: Date | string;
+    revisions?: { date: Date | string; label: string }[];
     topics?: string[];
   };
 }
@@ -17,8 +18,14 @@ const essays = Object.entries(modules)
     slug: path.split('/').pop()!.replace(/\.md$/, ''),
     ...essay.frontmatter,
     date: new Date(essay.frontmatter.date),
+    draftedDate: new Date(
+      essay.frontmatter.revisions?.find((revision) => revision.label === 'Drafted')?.date
+        ?? essay.frontmatter.date
+    ),
   }))
-  .sort((a, b) => b.date.getTime() - a.date.getTime());
+  .sort((a, b) =>
+    b.date.getTime() - a.date.getTime() || b.draftedDate.getTime() - a.draftedDate.getTime()
+  );
 ---
 <Academic title="Essays" description="Essays by Josh Dafoe on mathematics, computing, and related ideas.">
   <header class="page-header">
